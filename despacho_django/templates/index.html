@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Despacho Carcon | Inicio{% endblock %}
+{% block body_class %}index{% endblock %}
+{% block preloader_time %}1000{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+
+<div class="index-page">
+    <!-- 1) HERO PRINCIPAL -->
+    <section class="index-hero" aria-labelledby="index-hero-title">
+        <div class="index-container index-hero__grid">
+            <div class="index-hero__copy">
+                <!-- Promo Carcon (video + texto) -->
+                <section class="index-promo" aria-label="Promoción Carcon">
+                    <div class="index-promo__media" id="carcon-video">
+                        <iframe
+                            src="https://www.youtube.com/embed/OnfxoU-6NqU"
+                            title="Carcon - Video promocional"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                            loading="lazy"
+                        ></iframe>
+                    </div>
+                    <div class="index-promo__content">
+                        <h3 class="index-promo__title">Carcon · Aplicación de servicios de construcción</h3>
+                        <p class="index-promo__text">
+                            Carcon es una aplicación diseñada para conectar de forma rápida y confiable a profesionales de la construcción con personas que necesitan servicios especializados.
+                        </p>
+                        <div class="index-promo__actions">
+                            <a class="index-btn index-btn--ghost" href="#carcon-video">Ver video</a>
+                            <a class="index-btn index-btn--primary" href="#">Descargar aplicación (APK)</a>
+                        </div>
+                        <p class="index-promo__notice">
+                            Esta aplicación se distribuye en formato APK fuera de Google Play. Descárgala únicamente desde este sitio oficial.
+                        </p>
+                    </div>
+                </section>
+
+                <p class="index-eyebrow">Arquitectura · Interiorismo · Paisajismo</p>
+                <h1 id="index-hero-title" class="index-hero__title">Estudio Carcon</h1> 
+                <p class="index-hero__lead">
+                    Proyectos sobrios y precisos, con atención al detalle y una narrativa espacial clara.
+                </p>
+                <div class="index-actions">
+                    <a class="index-btn index-btn--primary" href="{% url 'proyectos:proyectos_page' %}">Ver proyectos</a>
+                    <a class="index-btn index-btn--ghost" href="{% url 'proyectos:contacto_page' %}">Agenda una consulta</a>
+                </div>
+            </div>
+
+            <figure class="index-hero__media" aria-label="Imagen principal del Estudio">
+                <img
+                    class="index-img"
+                    src="{% static 'img/casa-moderna.jpg' %}"
+                    alt="Vista de arquitectura contemporánea"
+                    loading="eager"
+                >
+            </figure>
+        </div>
+    </section>
+
+    <!-- 2) QUIÉNES SOMOS -->
+    <section class="index-about" aria-labelledby="index-about-title">
+        <div class="index-container index-split">
+            <figure class="index-split__media" aria-label="Equipo y proceso">
+                <img
+                    class="index-img"
+                    src="{% static 'img/explicando.jpg' %}"
+                    alt="Revisión de planos y toma de decisiones en sitio"
+                    loading="lazy"
+                >
+            </figure>
+            <div class="index-split__copy">
+                <h2 id="index-about-title" class="index-title">Quiénes somos</h2>
+                <p class="index-text">
+                    Somos un Estudio enfocado en arquitectura, interiorismo y paisajismo. Diseñamos con un
+                    lenguaje contemporáneo, cuidando proporción, luz y materialidad.
+                </p>
+                <p class="index-text">
+                    Nuestro trabajo combina claridad técnica con una visión editorial del espacio: cada
+                    proyecto se construye desde el contexto, el uso y el detalle.
+                </p>
+                <a class="index-link" href="{% url 'proyectos:sobre_nosotros_page' %}">Conoce más sobre el Estudio</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3) PROYECTOS DESTACADOS (estático, sin API/JS) -->
+    <section class="index-featured" aria-labelledby="index-featured-title">
+        <div class="index-container">
+            <div class="index-featured__header">
+                <h2 id="index-featured-title" class="index-title">Proyectos </h2>
+                <p class="index-text index-text--muted">
+                    Una selección de categorías representativas. Explora el portafolio completo.
+                </p>
+            </div>
+
+            <article class="index-feature">
+                <div class="index-feature__grid">
+                    <figure class="index-feature__media">
+                        <a href="{% url 'proyectos:proyectos_page' %}?categoria=Residencial" class="index-media-link">
+                            <img class="index-img" src="{% static 'img/recidencial.jpg' %}" alt="Proyecto residencial" loading="lazy">
+                        </a>
+                    </figure>
+                    <div class="index-feature__copy">
+                        <p class="index-eyebrow">Residencial</p>
+                        <h3 class="index-subtitle">Vivienda contemporánea</h3>
+                        <p class="index-text">
+                            Espacios serenos, luz natural y una composición limpia que prioriza el bienestar y la vida diaria.
+                        </p>
+                        <a class="index-link" href="{% url 'proyectos:proyectos_page' %}?categoria=Residencial">Ver categoría</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="index-feature index-feature--reverse">
+                <div class="index-feature__grid">
+                    <figure class="index-feature__media">
+                        <a href="{% url 'proyectos:proyectos_page' %}?categoria=Comercial" class="index-media-link">
+                            <img class="index-img" src="{% static 'img/comercio.png' %}" alt="Proyecto comercial" loading="lazy">
+                        </a>
+                    </figure>
+                    <div class="index-feature__copy">
+                        <p class="index-eyebrow">Comercial</p>
+                        <h3 class="index-subtitle">Identidad, flujo y presencia</h3>
+                        <p class="index-text">
+                            Proyectos con carácter y precisión funcional: recorridos claros, materiales honestos y una lectura editorial.
+                        </p>
+                        <a class="index-link" href="{% url 'proyectos:proyectos_page' %}?categoria=Comercial">Ver categoría</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="index-feature">
+                <div class="index-feature__grid">
+                    <figure class="index-feature__media">
+                        <a href="{% url 'proyectos:proyectos_page' %}?sub=Paisajismo" class="index-media-link">
+                            <img class="index-img" src="{% static 'img/oficina-minimalista.jpg' %}" alt="Paisaje y entorno" loading="lazy">
+                        </a>
+                    </figure>
+                    <div class="index-feature__copy">
+                        <p class="index-eyebrow">Pisajismo</p>
+                        <h3 class="index-subtitle">Relación con el entorno</h3>
+                        <p class="index-text">
+                            Intervenciones que conectan arquitectura y naturaleza con una composición sobria y duradera.
+                        </p>
+                        <a class="index-link" href="{% url 'proyectos:proyectos_page' %}?sub=Paisajismo">Ver categoría</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- 4) CTA FINAL -->
+    <section class="index-cta" aria-labelledby="index-cta-title">
+        <div class="index-container index-cta__inner">
+            <h2 id="index-cta-title" class="index-cta__title">Hablemos de tu próximo proyecto</h2>
+            <p class="index-text index-text--muted">
+                Cuéntanos lo esencial y te responderemos con una propuesta clara.
+            </p>
+            <a class="index-btn index-btn--primary" href="{% url 'proyectos:contacto_page' %}">Contáctanos</a>
+        </div>
+    </section>
+</div>
+
+{% endblock %}

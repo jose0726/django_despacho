@@ -1,0 +1,355 @@
+/* --- Categorías y Subcategorías Mejoradas --- */
+.categoria {
+    margin-bottom: 1.5rem;
+}
+
+.categoria-btn {
+    width: 100%;
+    padding: 0.85rem 1.25rem;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 0.35rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.35s ease;
+    text-align: left;
+    background-size: 200% 200%;
+}
+
+.categoria-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #003f7f);
+    background-position: 100% 0%;
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.22);
+}
+
+.categoria-btn:active {
+    transform: translateY(0) scale(0.99);
+}
+
+.categoria-btn:focus-visible {
+    outline: 3px solid rgba(0, 123, 255, 0.35);
+    outline-offset: 2px;
+}
+
+.subcategoria-container {
+    display: none;
+    padding-left: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+/* Panel de categorías: ancho controlado y centrado */
+.proyectos-panel {
+    width: min(100%, 820px);
+    margin: 0 auto 1rem auto;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.subcategoria-btn {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 1rem;
+    background: #f9f9f9;
+    border: 1px solid #007bff;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 0.25rem;
+    transition: all 0.25s ease;
+    text-align: left;
+}
+
+.subcategoria-btn:hover {
+    background: #007bff;
+    color: #fff;
+    transform: translateX(3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.subcategoria-btn:focus-visible {
+    outline: 2px solid rgba(0, 123, 255, 0.35);
+    outline-offset: 2px;
+}
+
+    /* --- Proyectos Filtrados en lista --- */
+.proyectos-filtrados {
+    display: flex;
+    flex-direction: column;   /* en columna */
+    gap: 2rem;                /* espacio entre proyectos */
+    margin-top: 1.5rem;
+    align-items: center;      /* centra horizontalmente */
+    }
+ .proyecto-item {
+  width: 90%;
+  max-width: 800px;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* Estado inicial para Anime.js: sin escala para evitar salto visual */
+  /* IMPORTANTE: No poner transform aquí si Anime.js lo va a controlar desde 0 */
+  opacity: 0; /* RESTAURADO: necesario para animaciones */
+  min-height: 300px;
+  will-change: transform, opacity;
+}
+ 
+
+
+ .proyecto-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+.proyecto-item img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+}
+
+/* Removed conflicting final-state rules to allow JS-driven animations to control visual entry */
+
+
+.proyecto-item .descripcion {
+    padding: 0.6rem 0;
+    text-align: center;
+    background: #fff;
+    width: 100%;
+}
+
+.proyecto-item .descripcion h4 {
+    margin-bottom: 0.25rem;
+    font-size: 1.05rem;
+    color: var(--color-secundario);
+    font-weight: 600;
+}
+
+.proyecto-item .descripcion p {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* --- Modal --- */
+#modal-proyecto {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.85);
+    align-items: center;
+    justify-content: center;
+}
+
+#modal-proyecto .modal-contenido {
+    background: #111; /* Forzar fondo oscuro para mejor contraste de botones */
+    color: #fff;
+    max-width: 850px;
+    width: 90%;
+    border-radius: 15px;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    animation: modalFade 0.3s ease;
+}
+
+/* Layout del cuerpo del modal: galería + panel de info */
+.modal-body {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.25rem;
+    align-items: center;
+}
+
+#modal-proyecto .close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    font-size: 26px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #fff;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+#modal-proyecto .close-modal:hover {
+    transform: rotate(90deg) scale(1.05);
+    background: rgba(255,255,255,0.14);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+
+#modal-proyecto .close-modal:active {
+    transform: rotate(90deg) scale(0.98);
+}
+
+#modal-proyecto .close-modal:focus-visible {
+    outline: 3px solid rgba(255,255,255,0.35);
+    outline-offset: 2px;
+}
+/* --- Galería dentro del modal --- */
+.modal-galeria {
+  display: flex;
+  align-items: center;
+    justify-content: center;
+    gap: 0.75rem; /* espacio entre flechas e imagen */
+  margin: 1rem 0;
+    width: 100%;
+}
+
+/* Panel de información del proyecto */
+.modal-info {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    max-height: 70svh;
+    overflow: auto;
+}
+
+.modal-info .modal-sub {
+    font-weight: 600;
+    color: #e0e0e0;
+    margin-bottom: 0.5rem;
+}
+
+.modal-info .modal-desc {
+    color: #d2d2d2;
+    line-height: 1.5;
+    white-space: pre-line; /* por si la descripción trae saltos */
+}
+
+/* Imagen dentro del modal */
+#modal-img {
+    flex: 1 1 auto;
+    min-width: 0; /* permite que la imagen reduzca sin overflow en flex */
+    width: auto;
+    max-width: 100%;
+    max-height: 70svh;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    object-fit: contain;
+    display: block;
+}
+
+/* Botones de navegación (flechas) - estilo moderno con animación */
+.nav-btn {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.25);
+    font-size: 1.3rem;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    flex: 0 0 44px; /* evita que las flechas se aplasten en layouts estrechos */
+}
+
+.nav-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.25), rgba(255,255,255,0) 60%);
+    transform: scale(0);
+    transition: transform 250ms ease;
+}
+
+.nav-btn:hover {
+    transform: translateY(-1px) scale(1.05);
+    background: rgba(255,255,255,0.12);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+}
+
+.nav-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.nav-btn:active::after {
+    transform: scale(1);
+}
+
+.nav-btn:focus-visible {
+    outline: 3px solid rgba(255,255,255,0.35);
+    outline-offset: 2px;
+}
+
+
+/* --- Tooltip Imagen al pasar el cursor --- */
+.tooltip-imagen {
+    position: absolute;
+    pointer-events: none;
+    display: none;
+    z-index: 9999;
+    width: 220px;
+    height: 140px;
+    border: 2px solid var(--color-acento);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    background: #fff;
+}
+
+.tooltip-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --- Animaciones --- */
+@keyframes modalFade {
+    from {opacity: 0; transform: scale(0.95);}
+    to {opacity: 1; transform: scale(1);}
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+    .categoria-btn { font-size: 0.95rem; padding: 0.7rem 1rem; }
+    .subcategoria-btn { font-size: 0.95rem; padding: 0.55rem 0.9rem; }
+    #modal-proyecto .modal-contenido { padding: 1.2rem; }
+    .nav-btn { width: 40px; height: 40px; font-size: 1.15rem; }
+    #modal-img { max-height: 56svh; }
+    .proyecto-item { width: 100%; max-width: 100%; }
+    .proyecto-item img { height: auto; }
+}
+
+@media (max-width: 900px) {
+    .modal-body {
+        grid-template-columns: 1fr; /* stack en móviles/tablets */
+        align-items: stretch;
+    }
+    .modal-info {
+        max-height: 40svh; /* evitar que tape toda la imagen en pantallas chicas */
+    }
+}

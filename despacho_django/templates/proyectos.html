@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Proyectos | Despacho Carcon{% endblock %}
+{% block body_class %}proyectos{% endblock %}
+{% block preloader_time %}1500{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/proyectos.css' %}">
+{% endblock %}
+
+{% block extra_scripts %}
+    <script>
+        // API Base para fetch de proyectos
+        // En producción/desarrollo, la API vive en el mismo origen.
+        // Dejar vacío fuerza URLs relativas (ej: /api/proyectos/)
+        window.API_BASE = '';
+    </script>
+    <script src="{% static 'js/anime.min.js' %}"></script>
+    <script src="{% static 'js/proyectos.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+    <section id="proyectos-section">
+    <div class="proyectos-panel">
+        <!-- Categorías -->
+        <div class="categoria">
+            <button class="categoria-btn" aria-expanded="false">Comercial</button>
+            <div class="subcategoria-container">
+                <button class="subcategoria-btn">Tiendas</button>
+                <button class="subcategoria-btn">Bares</button>
+                <button class="subcategoria-btn">Restaurantes</button>  
+                <button class="subcategoria-btn">Oficinas</button>
+                <button class="subcategoria-btn">Clinicas</button>
+                <button class="subcategoria-btn">Bodegas</button>
+            </div>
+        </div>
+
+        <div class="categoria">
+            <button class="categoria-btn" aria-expanded="false">Residencial</button>
+            <div class="subcategoria-container">
+                <button class="subcategoria-btn">Interes social</button>
+                <button class="subcategoria-btn">Interes medio</button>
+                <button class="subcategoria-btn">interes alto</button>
+                <button class="subcategoria-btn">Multifamiliar</button>
+                <button class="subcategoria-btn">Interiorismo</button>
+                <button class="subcategoria-btn">Paisajismo</button>             
+            </div>
+        </div>
+
+        <!-- Agregar más categorías fácilmente si en el futuro hay más -->
+    </div>
+
+    <!-- Contenedor de proyectos filtrados -->
+    <div id="proyectos-filtrados" class="proyectos-filtrados"></div>
+</section>
+
+{% endblock %}

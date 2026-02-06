@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ proyecto.nombre }}</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 2rem; max-width: 960px; }
+    .meta { color: #666; }
+    img { max-width: 100%; border-radius: 8px; }
+    .back { display: inline-block; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+  <a class="back" href="{% url 'proyectos_list' %}">← Volver a proyectos</a>
+  <h1>{{ proyecto.nombre }}</h1>
+  <p class="meta">{{ proyecto.categoria }} · {{ proyecto.subcategoria }}</p>
+  {% if proyecto.imagen %}
+    <img src="{{ proyecto.imagen.url }}" alt="{{ proyecto.nombre }}" />
+  {% endif %}
+  <p>{{ proyecto.descripcion }}</p>
+</body>
+</html>

@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Despacho Carcon: Diseño arquitectónico, interiorismo y paisajismo de calidad profesional.">
+    
+    <!-- Title dinámico por página -->
+    <title>{% block title %}Despacho Carcon{% endblock %}</title>
+    
+    <!-- CSS Global -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    <!-- Font Awesome Local (sin CDN, sin warnings de CSP) -->
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
+    
+    <!-- Fonts Google (opcional, si lo deseas) -->
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS adicional por página -->
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}" data-preloader-time="{% block preloader_time %}250{% endblock %}">
+
+    <!-- Preloader -->
+    <div id="preloader" role="status" aria-label="Cargando" aria-live="polite">
+        <div class="preloader-logo-split">
+            <img src="{% static 'img/logo-CARCOM.png' %}" alt="CARCOM" class="logo-half logo-half--left">
+            <img src="{% static 'img/logo-CARCOM.png' %}" alt="" class="logo-half logo-half--right" aria-hidden="true">
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="{% url 'proyectos:index' %}" class="logo-container">
+            <img src="{% static 'img/logo-CARCOM.png' %}" alt="Logo del Estudio Carcon">
+        </a>
+        <nav>
+            <ul>
+                <li><a href="{% url 'proyectos:index' %}">Inicio</a></li>
+                <li><a href="{% url 'proyectos:sobre_nosotros_page' %}">Sobre Nosotros</a></li>
+                <li><a href="{% url 'proyectos:proyectos_page' %}">Proyectos</a></li>
+                <li><a href="{% url 'proyectos:contacto_page' %}">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h3>Estudio Carcon</h3>
+                <p>Diseño arquitectónico, interiorismo y paisajismo.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <p>Tule 20, Valle Verde, 56577 Ixtapaluca, Estado de México</p>
+                <p>Teléfono: <a href="tel:5513009297">55 1300 9297</a></p>
+                <p>Email: <a href="mailto:carcon.arquitectura1@gmail.com">carcon.arquitectura1@gmail.com</a></p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Síguenos</h4>
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/carconarq" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Carcon">
+                        <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+                        <span>@carconarq</span>
+                    </a>
+                    <a href="https://www.facebook.com/share/1A8LG1rUjJ/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" aria-label="Facebook de Carcon">
+                        <i class="fa-brands fa-facebook" aria-hidden="true"></i>
+                        <span>Facebook</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 Estudio Carcon. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts globales -->
+    <script src="{% static 'js/app.js' %}" defer></script>
+    
+    <!-- Fallback: si JS no carga, ocultar el preloader -->
+    <noscript><style>#preloader{display:none !important}</style></noscript>
+
+    <!-- Scripts adicionales por página -->
+    {% block extra_scripts %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proyectos</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 2rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+    .card { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fff; }
+    .thumb { aspect-ratio: 16/10; background: #f3f3f3; display: flex; align-items: center; justify-content: center; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .content { padding: .75rem 1rem; }
+    .title { font-weight: 600; margin: 0 0 .25rem; }
+    .meta { color: #666; font-size: .9rem; }
+    a { color: inherit; text-decoration: none; }
+    a:hover .title { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Proyectos</h1>
+  <div class="grid">
+    {% for p in proyectos %}
+      <article class="card">
+        <a href="{% url 'proyecto_detalle' p.pk %}">
+          <div class="thumb">
+            {% if p.imagen %}
+              <img src="{{ p.imagen.url }}" alt="{{ p.nombre }}" />
+            {% else %}
+              <span>Sin imagen</span>
+            {% endif %}
+          </div>
+          <div class="content">
+            <h2 class="title">{{ p.nombre }}</h2>
+            <p class="meta">{{ p.categoria }} · {{ p.subcategoria }}</p>
+          </div>
+        </a>
+      </article>
+    {% empty %}
+      <p>No hay proyectos.</p>
+    {% endfor %}
+  </div>
+</body>
+</html>
