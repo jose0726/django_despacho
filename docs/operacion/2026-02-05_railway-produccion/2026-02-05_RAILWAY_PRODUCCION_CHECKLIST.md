@@ -32,7 +32,7 @@ Obligatorias (producción):
 - `DJANGO_SECRET_KEY` = valor fuerte (mínimo 50+ chars)
 - `DJANGO_ALLOWED_HOSTS` = lista separada por comas. Ejemplo:
   - `.up.railway.app,tu-dominio.com`
-- `DATABASE_URL` = cadena PostgreSQL provista por Railway (plugin Postgres)
+- `DATABASE_URL` = pega aquí la **Connection URL** del plugin PostgreSQL (Railway)
 - `SENDGRID_API_KEY` = API Key de SendGrid
 - `SENDGRID_FROM_EMAIL` = remitente verificado en SendGrid
 - `SENDGRID_TO_EMAIL` = email administrador que recibe los contactos

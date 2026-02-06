@@ -157,7 +157,7 @@ WSGI_APPLICATION = 'despacho_django.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASE_URL = os.getenv('DATABASE_URL')
+DATABASE_URL = os.getenv('postgresql://postgres:IebjTSSmLBMWqyBjUEsrJwvkcVbpVcOe@Postgres.railway.internal:5432/railway')
 if DATABASE_URL:
     try:
         import dj_database_url
@@ -227,21 +227,6 @@ STATICFILES_DIRS = [
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 if not DEBUG:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-
-# Django 4.2+ storage API
-# - In production, keep staticfiles on WhiteNoise.
-# - For uploads (MEDIA), use Cloudinary if configured.
-if USE_CLOUDINARY:
-    STORAGES = {
-        'default': {'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage'},
-        'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'},
-    }
-elif not DEBUG:
-    # In production without Cloudinary, MEDIA will be local and non-persistent on Railway.
-    STORAGES = {
-        'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'},
-    }
 
 
 # Security settings for production behind a proxy (Railway)
