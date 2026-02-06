@@ -1,6 +1,27 @@
 import os
 import sys
 import subprocess
+from pathlib import Path
+
+
+def project_dir() -> Path:
+    """Return the directory that contains manage.py (the Django project root)."""
+    repo_root = Path(__file__).resolve().parents[1]
+    return repo_root / "despacho_django"
+
+
+def ensure_project_on_syspath() -> None:
+    """Ensure the Django project directory is importable.
+
+    Railway executes this script from the repo root (/app). Our Django project
+    package (despacho_django) lives under /app/despacho_django, so we must add
+    that directory to sys.path before calling django.setup().
+    """
+
+    p = project_dir()
+    ps = str(p)
+    if ps not in sys.path:
+        sys.path.insert(0, ps)
 
 
 def env_bool(name: str, default: bool = False) -> bool:
@@ -11,7 +32,8 @@ def env_bool(name: str, default: bool = False) -> bool:
 
 
 def run_manage_py(*args: str) -> None:
-    subprocess.check_call([sys.executable, "despacho_django/manage.py", *args])
+    manage_py = project_dir() / "manage.py"
+    subprocess.check_call([sys.executable, str(manage_py), *args])
 
 
 def ensure_superuser_if_requested() -> None:
@@ -39,6 +61,7 @@ def ensure_superuser_if_requested() -> None:
         print("CREATE_SUPERUSER=true but missing DJANGO_SUPERUSER_USERNAME or DJANGO_SUPERUSER_PASSWORD")
         return
 
+    ensure_project_on_syspath()
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "despacho_django.settings")
     import django
 
@@ -75,13 +98,13 @@ def seed_projects_if_requested() -> None:
     if not env_bool("SEED_PROJECTS", default=False):
         return
 
+    ensure_project_on_syspath()
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "despacho_django.settings")
     import django
 
     django.setup()
 
     from django.apps import apps
-    from pathlib import Path
     import json
 
     Proyecto = apps.get_model("proyectos", "Proyecto")
