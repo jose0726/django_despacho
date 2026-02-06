@@ -113,6 +113,12 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('✅ [SUCCESS] Proyectos cargados y asignados a window.proyectos:', proyectos.length);
             console.log('✅ Primer proyecto:', proyectos[0]);
 
+            if (!proyectos.length) {
+                proyectosFiltradosContainer.innerHTML = '<p class="no-proyectos">Aún no hay proyectos cargados.</p>';
+                // No continuar: no hay categorías que construir.
+                return;
+            }
+
 
         } catch (error) {
             console.error("❌ [ERROR] No se pudieron cargar los proyectos:", error);
