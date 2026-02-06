@@ -73,7 +73,10 @@ def _env_list(name: str, default: list[str] | None = None) -> list[str]:
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = _env_bool('DJANGO_DEBUG')
+_debug_raw = os.getenv('DJANGO_DEBUG')
+DEBUG = _env_bool('DJANGO_DEBUG', default=False)
+if _debug_raw is None:
+    logger.warning('DJANGO_DEBUG no está definido; usando default seguro DEBUG=False')
 
 if not SECRET_KEY:
     if DEBUG:
@@ -254,8 +257,24 @@ STATICFILES_DIRS = [
 
 # Production static collection target (Railway + WhiteNoise)
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-if not DEBUG:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Django 4.2+ recomienda STORAGES en lugar de STATICFILES_STORAGE/DEFAULT_FILE_STORAGE.
+STORAGES = {
+    'staticfiles': {
+        'BACKEND': (
+            'whitenoise.storage.CompressedManifestStaticFilesStorage'
+            if not DEBUG
+            else 'django.contrib.staticfiles.storage.StaticFilesStorage'
+        )
+    },
+    'default': {
+        'BACKEND': (
+            'cloudinary_storage.storage.MediaCloudinaryStorage'
+            if USE_CLOUDINARY
+            else 'django.core.files.storage.FileSystemStorage'
+        )
+    },
+}
 
 
 # Security settings for production behind a proxy (Railway)
