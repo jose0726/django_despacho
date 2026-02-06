@@ -216,31 +216,29 @@ def main() -> None:
     # Make imports consistent for subprocesses too.
     ensure_project_on_pythonpath_env()
 
-    # Ensure manage.py is resolvable as ./manage.py for the commands below.
-    os.chdir(project_dir())
+    manage_py = str(manage_py_path())
 
-    print(">>> Running migrations")
+    print(">>> Running migrations", flush=True)
     subprocess.run(
-        ["python", "manage.py", "migrate", "--noinput"],
-        check=True
+        [sys.executable, manage_py, "migrate", "--noinput"],
+        check=True,
     )
-
-    print(">>> Collecting static files")
-    subprocess.run(
-        ["python", "manage.py", "collectstatic", "--noinput"],
-        check=True
-    )
-
-    print(">>> Starting Gunicorn")
 
     # Optional boot tasks (remain before serving traffic)
     ensure_superuser_if_requested()
     seed_projects_if_requested()
 
+    print(">>> Collecting static files", flush=True)
+    subprocess.run(
+        [sys.executable, manage_py, "collectstatic", "--noinput"],
+        check=True,
+    )
+
     port = os.getenv("PORT", "8080")
     workers = os.getenv("WEB_CONCURRENCY", "2")
     timeout = os.getenv("GUNICORN_TIMEOUT", "60")
 
+    print(">>> Starting Gunicorn", flush=True)
     args = [
         "gunicorn",
         "despacho_django.wsgi:application",
