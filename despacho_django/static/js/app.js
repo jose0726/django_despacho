@@ -1,62 +1,63 @@
 document.addEventListener('DOMContentLoaded', () => {
   const precargador = document.getElementById('preloader');
-  if (!precargador) return;
-  document.body.classList.add('preloader-active');
+  if (precargador) {
+    document.body.classList.add('preloader-active');
 
-  // UX: no bloquear por carga total de assets; mínimo fijo 250ms.
-  const duracionMinima = 250;
-  const inicio = Date.now();
+    // UX: no bloquear por carga total de assets; mínimo fijo 250ms.
+    const duracionMinima = 250;
+    const inicio = Date.now();
 
-  // tiempos internos (ajusta si quieres)
-  const T_IN = 250;       // entrada lateral
-  const T_APPROACH = 0; // ajuste previo al choque
-  const T_COLLIDE = 200;  // choque / unión
-  const T_SHOW = 400;     // logo totalmente unido visible
-  const T_FADE = 200;     // salida
+    // tiempos internos (ajusta si quieres)
+    const T_IN = 250;       // entrada lateral
+    const T_APPROACH = 0; // ajuste previo al choque
+    const T_COLLIDE = 200;  // choque / unión
+    const T_SHOW = 400;     // logo totalmente unido visible
+    const T_FADE = 200;     // salida
 
-  function setState(state) {
-    precargador.classList.remove('state-logo-in','state-logo-collision','state-logo-joined','state-fadeout');
-    if (state) precargador.classList.add(state);
-  }
+    function setState(state) {
+      precargador.classList.remove('state-logo-in','state-logo-collision','state-logo-joined','state-fadeout');
+      if (state) precargador.classList.add(state);
+    }
 
-  function hidePreloaderFinal() {
-    if (precargador.classList.contains('hidden')) return;
-    precargador.classList.add('hidden');
-    document.body.classList.remove('preloader-active');
-    setTimeout(() => {
-      if (precargador.parentNode) precargador.parentNode.removeChild(precargador);
-    }, 600);
-  }
-
-  function runLogoSequence() {
-    // 1. mitades entran desde los lados hasta quedar cerca del centro
-    setState('state-logo-in');
-    setTimeout(() => {
-      // 2. pequeño ajuste antes del choque (opcional, aquí lo combinamos)
-      setState('state-logo-collision');
+    function hidePreloaderFinal() {
+      if (precargador.classList.contains('hidden')) return;
+      precargador.classList.add('hidden');
+      document.body.classList.remove('preloader-active');
       setTimeout(() => {
-        // 3. se unen (posición final)
-        setState('state-logo-joined');
+        if (precargador.parentNode) precargador.parentNode.removeChild(precargador);
+      }, 600);
+    }
+
+    function runLogoSequence() {
+      // 1. mitades entran desde los lados hasta quedar cerca del centro
+      setState('state-logo-in');
+      setTimeout(() => {
+        // 2. pequeño ajuste antes del choque (opcional, aquí lo combinamos)
+        setState('state-logo-collision');
         setTimeout(() => {
-          // 4. fade out y remover
-          setState('state-fadeout');
-          setTimeout(hidePreloaderFinal, T_FADE);
-        }, T_SHOW);
-      }, T_COLLIDE);
-    }, T_IN + T_APPROACH);
+          // 3. se unen (posición final)
+          setState('state-logo-joined');
+          setTimeout(() => {
+            // 4. fade out y remover
+            setState('state-fadeout');
+            setTimeout(hidePreloaderFinal, T_FADE);
+          }, T_SHOW);
+        }, T_COLLIDE);
+      }, T_IN + T_APPROACH);
+    }
+
+    function onReadyHandler() {
+      const tiempoCarga = Date.now() - inicio;
+      const remaining = tiempoCarga < duracionMinima ? duracionMinima - tiempoCarga : 0;
+      setTimeout(runLogoSequence, remaining);
+    }
+
+    // Ejecutar desde DOMContentLoaded (este handler ya corre aquí).
+    onReadyHandler();
+
+    // fallback robusto
+    setTimeout(() => { runLogoSequence(); }, 10000);
   }
-
-  function onReadyHandler() {
-    const tiempoCarga = Date.now() - inicio;
-    const remaining = tiempoCarga < duracionMinima ? duracionMinima - tiempoCarga : 0;
-    setTimeout(runLogoSequence, remaining);
-  }
-
-  // Ejecutar desde DOMContentLoaded (este handler ya corre aquí).
-  onReadyHandler();
-
-  // fallback robusto
-  setTimeout(() => { runLogoSequence(); }, 10000);
 
   const observador = new IntersectionObserver((entradas) => {
     entradas.forEach(entrada => {
