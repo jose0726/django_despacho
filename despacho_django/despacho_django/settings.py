@@ -276,6 +276,11 @@ STORAGES = {
     },
 }
 
+# Safety valve: evita 500 si falta una entrada en el manifest.
+# Idealmente mantenlo en True cuando ya esté estable el pipeline de collectstatic.
+if not DEBUG:
+    WHITENOISE_MANIFEST_STRICT = _env_bool('WHITENOISE_MANIFEST_STRICT', default=False)
+
 
 # Security settings for production behind a proxy (Railway)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
