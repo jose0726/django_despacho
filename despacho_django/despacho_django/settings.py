@@ -134,13 +134,9 @@ if not DEBUG and os.getenv('CSRF_TRUSTED_ORIGINS') is not None and not CSRF_TRUS
     logger.warning('CSRF_TRUSTED_ORIGINS está definido pero vacío/ inválido')
 
 
-# Media files (uploads)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
-
 # Cloudinary (optional) for persistent MEDIA in production environments like Railway.
-# If CLOUDINARY_URL is set, uploaded media files are stored in Cloudinary.
+# - Se habilita ÚNICAMENTE si existe CLOUDINARY_URL.
+# - No usamos DEFAULT_FILE_STORAGE (obsoleto en Django 4.2+); usamos STORAGES.
 USE_CLOUDINARY = bool(os.getenv('CLOUDINARY_URL'))
 if USE_CLOUDINARY:
     if not os.getenv('CLOUDINARY_URL', '').startswith('cloudinary://'):
@@ -149,6 +145,13 @@ if USE_CLOUDINARY:
         'cloudinary',
         'cloudinary_storage',
     ]
+
+# Media files (uploads)
+# Nota Railway: el filesystem local NO es persistente. Si USE_CLOUDINARY=True,
+# los uploads (ImageField, etc.) se guardan y se sirven desde Cloudinary.
+# MEDIA_URL / MEDIA_ROOT quedan como fallback para desarrollo local.
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 
