@@ -51,14 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const API_BASE = (typeof window.API_BASE === 'string') ? window.API_BASE : '';
             const apiBaseTrimmed = API_BASE.replace(/\/$/, '');
             const apiUrl = apiBaseTrimmed
-                ? `${apiBaseTrimmed}/api/proyectos/?page_size=1000`
+                ? (apiBaseTrimmed + '/api/proyectos/?page_size=1000')
                 : '/api/proyectos/?page_size=1000';
             console.log('[FETCH] URL:', apiUrl);
 
             const response = await fetch(apiUrl);
             console.log('[FETCH] Respuesta recibida, status:', response.status);
             
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
             const data = await response.json();
             console.log('[FETCH] Datos parseados, tipo:', Array.isArray(data) ? 'array' : 'object', 'keys:', Object.keys(data));
             
@@ -91,12 +91,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const imgs = Array.isArray(p.imagenes) ? p.imagenes : [];
                 const firstImg = imgs.length && imgs[0].imagen ? resolveImageUrl(imgs[0].imagen) : '';
                 
+                const nombre = (p && p.nombre != null) ? p.nombre : ((p && p.titulo != null) ? p.titulo : '');
+                const descripcion = (p && p.descripcion != null) ? p.descripcion : '';
+                const categoria = (p && p.categoria != null) ? p.categoria : '';
+                const subcategoria = (p && p.subcategoria != null) ? p.subcategoria : ((p && p.sub != null) ? p.sub : '');
+
                 return {
                     id: p.id,
-                    nombre: p.nombre ?? p.titulo ?? '',
-                    descripcion: p.descripcion ?? '',
-                    categoria: p.categoria ?? '',
-                    subcategoria: p.subcategoria ?? p.sub ?? '',
+                    nombre: nombre,
+                    descripcion: descripcion,
+                    categoria: categoria,
+                    subcategoria: subcategoria,
                     imagenes: imgs.map(i => i.imagen ? resolveImageUrl(i.imagen) : '').filter(Boolean),
                     preview: firstImg || PLACEHOLDER,  // primera imagen o placeholder
                 };
@@ -112,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error("❌ [ERROR] No se pudieron cargar los proyectos:", error);
             window.proyectosLoaded = false;
-            proyectosFiltradosContainer.innerHTML = `<p class="no-proyectos">Error al cargar la información de proyectos. Por favor, intente más tarde.</p>`;
+            proyectosFiltradosContainer.innerHTML = '<p class="no-proyectos">Error al cargar la información de proyectos. Por favor, intente más tarde.</p>';
             return;
         }
         // Resolver URLs de imagen (ya normalizado arriba)
@@ -192,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     await resetUI({ exceptCat: catDiv });
                     const filtrados = proyectos.filter(p => normalizeString(p.subcategoria) === sub);
                     if (filtrados.length === 0) {
-                        proyectosFiltradosContainer.innerHTML = `<p class="no-proyectos">No hay proyectos en esta subcategoría.</p>`;
+                        proyectosFiltradosContainer.innerHTML = '<p class="no-proyectos">No hay proyectos en esta subcategoría.</p>';
                         return;
                     }
                     renderProyectos(filtrados);
@@ -210,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     catBtn.setAttribute('aria-expanded', 'true');
                     const filtradosCat = proyectos.filter(p => normalizeString(p.categoria) === catSlug);
                     if (filtradosCat.length === 0) {
-                        proyectosFiltradosContainer.innerHTML = `<p class="no-proyectos">No hay proyectos en esta categoría.</p>`;
+                        proyectosFiltradosContainer.innerHTML = '<p class="no-proyectos">No hay proyectos en esta categoría.</p>';
                     } else {
                         renderProyectos(filtradosCat);
                     }
@@ -240,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn.setAttribute('aria-expanded', 'true');
                     const filtradosCat = proyectos.filter(p => normalizeString(p.categoria) === catSlug);
                     if (filtradosCat.length === 0) {
-                        proyectosFiltradosContainer.innerHTML = `<p class="no-proyectos">No hay proyectos en esta categoría.</p>`;
+                        proyectosFiltradosContainer.innerHTML = '<p class="no-proyectos">No hay proyectos en esta categoría.</p>';
                     } else {
                         renderProyectos(filtradosCat);
                     }
@@ -287,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
             proyectosFiltradosContainer.innerHTML = '';
             const filtrados = proyectos.filter(p => normalizeString(p.subcategoria) === subSlug);
             if (!filtrados.length) {
-                proyectosFiltradosContainer.innerHTML = `<p class="no-proyectos">No hay proyectos en esta subcategoría.</p>`;
+                proyectosFiltradosContainer.innerHTML = '<p class="no-proyectos">No hay proyectos en esta subcategoría.</p>';
             } else {
                 renderProyectos(filtrados);
             }
@@ -338,7 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 const descripcion = document.createElement('div');
                 descripcion.className = 'descripcion';
-                descripcion.innerHTML = `<h4>${p.nombre}</h4><p>${p.descripcion || ''}</p>`;
+                descripcion.innerHTML = '<h4>' + (p.nombre || '') + '</h4><p>' + (p.descripcion || '') + '</p>';
                 div.appendChild(imgEl);
                 div.appendChild(descripcion);
                 div.addEventListener('click', () => abrirModal(p));
@@ -491,7 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 info.className = 'modal-info';
                 const subEl = document.createElement('div');
                 subEl.className = 'modal-sub';
-                subEl.textContent = p.subcategoria ? `Categoría: ${p.subcategoria}` : '';
+                subEl.textContent = p.subcategoria ? ('Categoría: ' + p.subcategoria) : '';
                 const descEl = document.createElement('p');
                 descEl.className = 'modal-desc';
                 descEl.textContent = p.descripcion || '';

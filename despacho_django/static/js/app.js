@@ -57,22 +57,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // fallback robusto
   setTimeout(() => { runLogoSequence(); }, 10000);
-});
-    const observador = new IntersectionObserver((entradas) => {
-        entradas.forEach(entrada => {
-            if (entrada.isIntersecting) entrada.target.classList.add('is-visible');
-        });
-    }, { threshold: 0.1 });
 
-    const elementosParaAnimar = document.querySelectorAll('.animate-on-scroll');
-    elementosParaAnimar.forEach(elemento => observador.observe(elemento));
+  const observador = new IntersectionObserver((entradas) => {
+    entradas.forEach(entrada => {
+      if (entrada.isIntersecting) entrada.target.classList.add('is-visible');
+    });
+  }, { threshold: 0.1 });
+
+  const elementosParaAnimar = document.querySelectorAll('.animate-on-scroll');
+  elementosParaAnimar.forEach(elemento => observador.observe(elemento));
 
   const formularioContacto = document.getElementById('formulario-contacto');
   const mensajeConfirmacion = document.getElementById('mensaje-confirmacion');
 
   function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
+    const value = '; ' + document.cookie;
+    const parts = value.split('; ' + name + '=');
     if (parts.length === 2) return parts.pop().split(';').shift();
     return null;
   }
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
           payload = await res.json();
         } else {
           const text = await res.text();
-          throw new Error(`Respuesta no-JSON del backend (HTTP ${res.status}): ${text.slice(0, 200)}`);
+          throw new Error('Respuesta no-JSON del backend (HTTP ' + res.status + '): ' + text.slice(0, 200));
         }
 
         if (res.ok && payload && payload.ok) {
@@ -211,4 +211,6 @@ if (equipoSecundario) {
 
   observerEquipo.observe(equipoSecundario);
 }
+
+});
 
