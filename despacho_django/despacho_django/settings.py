@@ -157,7 +157,7 @@ WSGI_APPLICATION = 'despacho_django.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASE_URL = os.getenv('postgresql://postgres:IebjTSSmLBMWqyBjUEsrJwvkcVbpVcOe@Postgres.railway.internal:5432/railway')
+DATABASE_URL = os.getenv('DATABASE_URL')
 if DATABASE_URL:
     try:
         import dj_database_url
