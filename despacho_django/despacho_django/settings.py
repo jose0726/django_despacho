@@ -15,6 +15,8 @@ import os
 import logging
 from django.core.exceptions import ImproperlyConfigured
 
+logger = logging.getLogger(__name__)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,7 +28,7 @@ if ENV_FILE.exists():
         load_dotenv(ENV_FILE)
     except Exception as e:
         # In production, environment variables should be set by the OS/service.
-        logging.getLogger(__name__).warning("No se pudo cargar .env (%s): %s", ENV_FILE, e)
+        logger.warning("No se pudo cargar .env (%s): %s", ENV_FILE, e)
 
 
 # HTTPS / CA bundle
@@ -39,17 +41,25 @@ if not os.getenv('SSL_CERT_FILE'):
 
         os.environ.setdefault('SSL_CERT_FILE', certifi.where())
     except Exception as e:
-        logging.getLogger(__name__).warning("No se pudo configurar certifi para SSL_CERT_FILE: %s", e)
+        logger.warning("No se pudo configurar certifi para SSL_CERT_FILE: %s", e)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-def _env_bool(name: str, default: bool = False) -> bool:
+def _env_bool(name: str, default: bool | None = None) -> bool:
     raw = os.getenv(name)
     if raw is None:
+        if default is None:
+            raise ImproperlyConfigured(f'{name} must be set to a boolean value')
         return default
-    return raw.strip().lower() in ('1', 'true', 'yes', 'on')
+
+    value = raw.strip().lower()
+    if value in ('1', 'true', 'yes', 'on'):
+        return True
+    if value in ('0', 'false', 'no', 'off'):
+        return False
+    raise ImproperlyConfigured(f'{name} must be a boolean (true/false), got: {raw!r}')
 
 
 def _env_list(name: str, default: list[str] | None = None) -> list[str]:
@@ -63,7 +73,7 @@ def _env_list(name: str, default: list[str] | None = None) -> list[str]:
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = _env_bool('DJANGO_DEBUG', default=False)
+DEBUG = _env_bool('DJANGO_DEBUG')
 
 if not SECRET_KEY:
     if DEBUG:
@@ -112,9 +122,13 @@ CSRF_FAILURE_VIEW = 'proyectos.csrf.csrf_failure'
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 if not DEBUG:
     CORS_ALLOWED_ORIGINS = _env_list('CORS_ALLOWED_ORIGINS', default=[])
+    if os.getenv('CORS_ALLOWED_ORIGINS') is not None and not CORS_ALLOWED_ORIGINS:
+        logger.warning('CORS_ALLOWED_ORIGINS está definido pero vacío/ inválido')
 
 # CSRF trusted origins (comma-separated). Útil si usas dominio(s) externos o proxy HTTPS.
 CSRF_TRUSTED_ORIGINS = _env_list('CSRF_TRUSTED_ORIGINS', default=[])
+if not DEBUG and os.getenv('CSRF_TRUSTED_ORIGINS') is not None and not CSRF_TRUSTED_ORIGINS:
+    logger.warning('CSRF_TRUSTED_ORIGINS está definido pero vacío/ inválido')
 
 
 # Media files (uploads)
@@ -126,6 +140,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # If CLOUDINARY_URL is set, uploaded media files are stored in Cloudinary.
 USE_CLOUDINARY = bool(os.getenv('CLOUDINARY_URL'))
 if USE_CLOUDINARY:
+    if not os.getenv('CLOUDINARY_URL', '').startswith('cloudinary://'):
+        logger.warning('CLOUDINARY_URL no parece tener formato cloudinary://...')
     INSTALLED_APPS += [
         'cloudinary',
         'cloudinary_storage',
@@ -159,6 +175,8 @@ WSGI_APPLICATION = 'despacho_django.wsgi.application'
 
 DATABASE_URL = os.getenv('DATABASE_URL')
 if DATABASE_URL:
+    if not DEBUG and not DATABASE_URL.startswith(('postgres://', 'postgresql://')):
+        raise ImproperlyConfigured('DATABASE_URL must be a Postgres URL when DJANGO_DEBUG is False')
     try:
         import dj_database_url
 
@@ -180,6 +198,17 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+
+
+# Startup diagnostics (no secrets in clear-text)
+logger.info(
+    'Startup env: DEBUG=%s SECRET_KEY_SET=%s ALLOWED_HOSTS=%s DATABASE_URL_SET=%s USE_CLOUDINARY=%s',
+    DEBUG,
+    bool(SECRET_KEY),
+    ','.join(ALLOWED_HOSTS),
+    bool(DATABASE_URL),
+    USE_CLOUDINARY,
+)
 
 
 # Password validation
