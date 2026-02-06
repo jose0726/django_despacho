@@ -1,27 +1,58 @@
+import json
 import os
-import sys
 import subprocess
+import sys
 from pathlib import Path
 
 
+def repo_root() -> Path:
+    return Path(__file__).resolve().parents[1]
+
+
+def manage_py_path() -> Path:
+    """Find manage.py for both common layouts.
+
+    Supports:
+      - /app/manage.py
+      - /app/despacho_django/manage.py
+    """
+
+    candidates = [
+        repo_root() / "manage.py",
+        repo_root() / "despacho_django" / "manage.py",
+    ]
+    for p in candidates:
+        if p.exists():
+            return p
+    raise FileNotFoundError(
+        "No se encontró manage.py. Busqué en: " + ", ".join(str(c) for c in candidates)
+    )
+
+
 def project_dir() -> Path:
-    """Return the directory that contains manage.py (the Django project root)."""
-    repo_root = Path(__file__).resolve().parents[1]
-    return repo_root / "despacho_django"
+    """Directory that contains manage.py."""
+
+    return manage_py_path().parent
 
 
 def ensure_project_on_syspath() -> None:
-    """Ensure the Django project directory is importable.
-
-    Railway executes this script from the repo root (/app). Our Django project
-    package (despacho_django) lives under /app/despacho_django, so we must add
-    that directory to sys.path before calling django.setup().
-    """
+    """Ensure Django project directory is importable in *this* process."""
 
     p = project_dir()
     ps = str(p)
     if ps not in sys.path:
         sys.path.insert(0, ps)
+
+
+def ensure_project_on_pythonpath_env() -> None:
+    """Ensure Django project directory is importable for subprocesses (gunicorn)."""
+
+    p = str(project_dir())
+    current = os.environ.get("PYTHONPATH", "")
+    parts = [x for x in current.split(os.pathsep) if x]
+    if p not in parts:
+        parts.insert(0, p)
+        os.environ["PYTHONPATH"] = os.pathsep.join(parts)
 
 
 def env_bool(name: str, default: bool = False) -> bool:
@@ -32,8 +63,8 @@ def env_bool(name: str, default: bool = False) -> bool:
 
 
 def run_manage_py(*args: str) -> None:
-    manage_py = project_dir() / "manage.py"
-    subprocess.check_call([sys.executable, str(manage_py), *args])
+    ensure_project_on_pythonpath_env()
+    subprocess.check_call([sys.executable, str(manage_py_path()), *args])
 
 
 def ensure_superuser_if_requested() -> None:
@@ -105,7 +136,6 @@ def seed_projects_if_requested() -> None:
     django.setup()
 
     from django.apps import apps
-    import json
 
     Proyecto = apps.get_model("proyectos", "Proyecto")
     force = env_bool("SEED_PROJECTS_FORCE", default=False)
@@ -116,11 +146,15 @@ def seed_projects_if_requested() -> None:
         return
 
     # Locate JSON in a couple of likely places inside the repo.
-    root = Path(__file__).resolve().parents[1]
+    root = repo_root()
     candidates = [
+        # common in this repo
         root / "despacho_django" / "proyectos.json",
         root / "despacho_django" / "static" / "js" / "proyectos.json",
+        # alternate layout
         root / "proyectos.json",
+        project_dir() / "proyectos.json",
+        project_dir() / "static" / "js" / "proyectos.json",
     ]
     json_path = next((p for p in candidates if p.exists()), None)
     if not json_path:
@@ -179,6 +213,10 @@ def seed_projects_if_requested() -> None:
 def main() -> None:
     # Run migrations and collect static assets on deploy/start.
     # This ensures STATIC_ROOT exists before WhiteNoise initializes.
+    # Make imports consistent for subprocesses too.
+    ensure_project_on_pythonpath_env()
+
+    # Run migrations and collect static assets before starting Gunicorn.
     run_manage_py("migrate", "--noinput")
     ensure_superuser_if_requested()
     seed_projects_if_requested()
@@ -191,14 +229,20 @@ def main() -> None:
     args = [
         "gunicorn",
         "despacho_django.wsgi:application",
-        "--chdir",
-        "despacho_django",
         "--bind",
         f"0.0.0.0:{port}",
         "--workers",
         str(workers),
         "--timeout",
         str(timeout),
+        # Railway-friendly logs
+        "--access-logfile",
+        "-",
+        "--error-logfile",
+        "-",
+        "--log-level",
+        os.getenv("GUNICORN_LOG_LEVEL", "info"),
+        "--capture-output",
     ]
 
     os.execvp(args[0], args)
