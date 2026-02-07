@@ -17,14 +17,21 @@
                 <!-- Promo Carcon (video + texto) -->
                 <section class="index-promo" aria-label="Promoción Carcon">
                     <div class="index-promo__media" id="carcon-video">
-                        <iframe
-                            src="https://www.youtube.com/embed/OnfxoU-6NqU"
-                            title="Carcon - Video promocional"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen
-                            loading="lazy"
-                        ></iframe>
+                        {% if home_config and home_config.carcon_video_file %}
+                            <video controls playsinline preload="metadata" style="width: 100%; height: 100%; display: block;">
+                                <source src="{{ home_config.carcon_video_file.url }}">
+                                Tu navegador no soporta video HTML5.
+                            </video>
+                        {% elif home_config and home_config.carcon_video_url %}
+                            <iframe
+                                src="{{ home_config.carcon_video_embed_url }}"
+                                title="Carcon - Video promocional"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                                loading="lazy"
+                            ></iframe>
+                        {% endif %}
                     </div>
                     <div class="index-promo__content">
                         <h3 class="index-promo__title">Carcon · Aplicación de servicios de construcción</h3>

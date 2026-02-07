@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Proyecto, EquipoMiembro, EquipoSeccion
+from .models import Proyecto, EquipoMiembro, EquipoSeccion, HomePageConfig
 
 # Vista legacy de listado interno (mantener por compatibilidad interna)
 def index(request):
@@ -13,7 +13,8 @@ def proyecto_detalle(request, pk):
 # Nuevas vistas de páginas públicas (usar templates del proyecto)
 def index_page(request):
 	"""Página principal. Renderiza templates/index.html"""
-	return render(request, 'index.html')
+	config = HomePageConfig.objects.order_by('-actualizado').first()
+	return render(request, 'index.html', {'home_config': config})
 
 def proyectos_page(request):
 	"""Página de proyectos (frontend). Renderiza templates/proyectos.html"""

@@ -1,6 +1,61 @@
 from django.db import models
 
 
+class HomePageConfig(models.Model):
+    """Configuración de la página de inicio (contenido global).
+
+    Por ahora solo incluye el video de la promo (Carcon).
+    Puede ser:
+      - un archivo subido (mp4/webm) o
+      - una URL (YouTube/Vimeo/MP4 URL)
+    """
+
+    carcon_video_file = models.FileField(
+        upload_to='videos/',
+        blank=True,
+        null=True,
+        help_text='Sube un video (mp4/webm). Si existe, se usa este en lugar de la URL.',
+    )
+    carcon_video_url = models.URLField(
+        blank=True,
+        help_text='URL del video. Para YouTube puedes pegar link normal o embed.',
+    )
+    actualizado = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Configuración de Inicio'
+        verbose_name_plural = 'Configuración de Inicio'
+
+    def __str__(self) -> str:
+        return 'Configuración de Inicio'
+
+    @staticmethod
+    def _youtube_embed(url: str) -> str:
+        """Return a YouTube embed URL for common YouTube URL formats."""
+
+        raw = (url or '').strip()
+        if not raw:
+            return ''
+        if 'youtube.com/embed/' in raw:
+            return raw
+
+        # Common formats:
+        # - https://youtu.be/<id>
+        # - https://www.youtube.com/watch?v=<id>
+        video_id = ''
+        if 'youtu.be/' in raw:
+            video_id = raw.split('youtu.be/', 1)[1].split('?', 1)[0].split('&', 1)[0]
+        elif 'youtube.com/watch' in raw and 'v=' in raw:
+            video_id = raw.split('v=', 1)[1].split('&', 1)[0]
+
+        if video_id:
+            return f'https://www.youtube.com/embed/{video_id}'
+        return raw
+
+    def carcon_video_embed_url(self) -> str:
+        return self._youtube_embed(self.carcon_video_url)
+
+
 class Proyecto(models.Model):
     nombre = models.CharField(max_length=200)
     descripcion = models.TextField()

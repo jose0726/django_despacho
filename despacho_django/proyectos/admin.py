@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Proyecto, Contacto, ProyectoImagen, EquipoMiembro, EquipoSeccion
+from .models import Proyecto, Contacto, ProyectoImagen, EquipoMiembro, EquipoSeccion, HomePageConfig
 
 
 class ProyectoImagenInline(admin.TabularInline):
@@ -32,3 +32,20 @@ class EquipoMiembroAdmin(admin.ModelAdmin):
 class EquipoSeccionAdmin(admin.ModelAdmin):
     list_display = ('id', 'activo', 'actualizado')
     list_editable = ('activo',)
+
+
+@admin.register(HomePageConfig)
+class HomePageConfigAdmin(admin.ModelAdmin):
+    list_display = ('id', 'actualizado')
+    fields = ('carcon_video_file', 'carcon_video_url', 'actualizado')
+    readonly_fields = ('actualizado',)
+
+    def has_add_permission(self, request):
+        # Singleton: allow add only if none exists
+        if HomePageConfig.objects.exists():
+            return False
+        return super().has_add_permission(request)
+
+    def has_delete_permission(self, request, obj=None):
+        # Avoid accidental removal in production
+        return False
