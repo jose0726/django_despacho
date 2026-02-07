@@ -16,6 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+
+# Railway/production safeguard:
+# The repo root also contains a top-level `proyectos/` package which can shadow
+# the real Django app living next to manage.py (despacho_django/proyectos).
+# Ensure the project directory is first on sys.path before importing URLConfs.
+from pathlib import Path
+import sys
+
+PROJECT_DIR = Path(__file__).resolve().parent.parent
+project_dir_str = str(PROJECT_DIR)
+if project_dir_str not in sys.path:
+    sys.path.insert(0, project_dir_str)
 from django.conf import settings
 from django.conf.urls.static import static
 
