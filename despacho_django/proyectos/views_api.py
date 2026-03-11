@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage
 from django.utils.html import escape
+import dns.resolver
 import json
 import logging
 import os
@@ -12,6 +13,58 @@ from python_http_client.exceptions import HTTPError
 from .models import Proyecto, Contacto
 
 logger = logging.getLogger(__name__)
+
+
+# Typos comunes de dominios de correo → dominio correcto
+_DOMAIN_TYPOS = {
+    'gnail.com': 'gmail.com',
+    'gmai.com': 'gmail.com',
+    'gmial.com': 'gmail.com',
+    'gamil.com': 'gmail.com',
+    'gmail.co': 'gmail.com',
+    'gmail.om': 'gmail.com',
+    'gmaill.com': 'gmail.com',
+    'hotmal.com': 'hotmail.com',
+    'hotmai.com': 'hotmail.com',
+    'hotmil.com': 'hotmail.com',
+    'hotmail.co': 'hotmail.com',
+    'outloo.com': 'outlook.com',
+    'outlok.com': 'outlook.com',
+    'outloок.com': 'outlook.com',
+    'yaho.com': 'yahoo.com',
+    'yahooo.com': 'yahoo.com',
+    'yahoo.co': 'yahoo.com',
+    'protonmal.com': 'protonmail.com',
+    'protonmai.com': 'protonmail.com',
+    'iclod.com': 'icloud.com',
+    'icoud.com': 'icloud.com',
+}
+
+
+def _check_domain_typo(email):
+    """Devuelve sugerencia si el dominio parece un typo conocido, o None."""
+    if '@' not in email:
+        return None
+    domain = email.split('@', 1)[1].lower()
+    suggestion = _DOMAIN_TYPOS.get(domain)
+    if suggestion:
+        local = email.split('@', 1)[0]
+        return f'{local}@{suggestion}'
+    return None
+
+
+def _domain_has_mx(email):
+    """Verifica que el dominio del email tenga registros MX (puede recibir correo)."""
+    if '@' not in email:
+        return False
+    domain = email.split('@', 1)[1]
+    try:
+        answers = dns.resolver.resolve(domain, 'MX')
+        return len(answers) > 0
+    except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN,
+            dns.resolver.NoNameservers, dns.resolver.Timeout,
+            Exception):
+        return False
 
 
 def _validate_email(email):
@@ -139,6 +192,22 @@ def contact_form(request):
     # Validar formato de email
     if not _validate_email(correo):
         return JsonResponse({'ok': False, 'error': 'Email inválido.'}, status=400)
+
+    # Detectar typos comunes en dominio (gnail, hotmal, etc.)
+    suggestion = _check_domain_typo(correo)
+    if suggestion:
+        return JsonResponse({
+            'ok': False,
+            'error': f'¿Quisiste decir {suggestion}? Verifica tu correo.',
+            'suggestion': suggestion,
+        }, status=400)
+
+    # Verificar que el dominio pueda recibir correo (registros MX)
+    if not _domain_has_mx(correo):
+        return JsonResponse({
+            'ok': False,
+            'error': 'El dominio de tu correo no parece válido. Verifica tu email.',
+        }, status=400)
 
     # Guardar en DB (con datos sin sanitizar para preservar mensaje original)
     try:

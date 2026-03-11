@@ -149,6 +149,15 @@ document.addEventListener('DOMContentLoaded', () => {
             mensajeConfirmacion.textContent = msg;
             mensajeConfirmacion.style.color = '#d9534f';
           }
+
+          // Si el backend sugiere un correo corregido, rellenar el campo
+          if (payload && payload.suggestion) {
+            const correoInput = formularioContacto.querySelector('#correo');
+            if (correoInput) {
+              correoInput.value = payload.suggestion;
+              correoInput.focus();
+            }
+          }
         }
       } catch (err) {
         console.error('Error enviando formulario:', err);
