@@ -157,7 +157,7 @@ scene.background = new THREE.Color(0x1a1a2e);
 // ── Entorno IBL (necesario para texturas PBR / metálicos) ───
 const pmrem = new THREE.PMREMGenerator(renderer);
 pmrem.compileEquirectangularShader();
-const envTexture = pmrem.fromScene(new THREE.RoomEnvironment()).texture;
+const envTexture = pmrem.fromScene(new RoomEnvironment()).texture;
 scene.environment = envTexture;  // ilumina materiales PBR con texturas
 
 const camera = new THREE.PerspectiveCamera(
