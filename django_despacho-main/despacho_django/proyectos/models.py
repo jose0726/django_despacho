@@ -1,4 +1,17 @@
 from django.db import models
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+
+try:
+    from cloudinary_storage.storage import RawMediaCloudinaryStorage
+except ImportError:
+    RawMediaCloudinaryStorage = None
+
+def get_raw_storage():
+    """Usa Cloudinary Raw Storage en producción y el disco local en desarrollo"""
+    if getattr(settings, 'USE_CLOUDINARY', False) and RawMediaCloudinaryStorage:
+        return RawMediaCloudinaryStorage()
+    return FileSystemStorage()
 
 
 class HomePageConfig(models.Model):
@@ -66,6 +79,7 @@ class Proyecto(models.Model):
         upload_to='modelos3d/',
         blank=True,
         null=True,
+        storage=get_raw_storage,
         help_text='Archivo GLB o GLTF del modelo 3D. Se mostrará como visor interactivo en la página del proyecto.',
     )
     fecha_creacion = models.DateTimeField(auto_now_add=True)
