@@ -1,0 +1,416 @@
+[
+    {
+        "categoria": "Comercial",
+        "sub": "tiendas",
+        "titulo": "MAGALI MACA NAILS",
+        "imagenes": [
+            "img/proyecto/comercial/tiendas/magali_maca_nails/magali_maca_nails_1.webp"
+        ],
+        "descripcion": "Proyecto comercial de tienda."
+    },
+    {
+        "categoria": "Comercial",
+        "sub": "tiendas",
+        "titulo": "TIENDA IBERO",
+        "imagenes": [
+            "img/proyecto/comercial/tiendas/tienda_ibero/tienda_ibero_1.webp"
+        ],
+        "descripcion": "Proyecto comercial de tienda."
+    },
+    {
+        "categoria": "Comercial",
+        "sub": "tiendas",
+        "titulo": "TIENDAS TUMI",
+        "imagenes": [
+            "img/proyecto/comercial/tiendas/tiendas_tumi/tiendas_tumi_1.webp"
+        ],
+        "descripcion": "Proyecto comercial de tienda."
+    },
+    {
+        "categoria": "Comercial",
+        "sub": "restaurantes",
+        "titulo": "HOYO 19 PARAISO COUNTRY",
+        "imagenes": [
+            "img/proyecto/comercial/restaurantes/hoyo19_paraiso_country/hoyo19_paraiso_country_1.webp"
+        ],
+        "descripcion": "Proyecto de restaurante en Paraíso Country Club."
+    },
+    {
+        "categoria": "Comercial",
+        "sub": "oficinas",
+        "titulo": "METEPEC",
+        "imagenes": [
+            "img/proyecto/comercial/oficinas/metepec/metepec_1.webp"
+        ],
+        "descripcion": "Proyecto de oficinas en Metepec."
+    },
+    {
+        "categoria": "Comercial",
+        "sub": "oficinas",
+        "titulo": "OFICINA PRIVADA LOMA BONITA",
+        "imagenes": [
+            "img/proyecto/comercial/oficinas/loma_bonita/loma_bonita_1.webp"
+        ],
+        "descripcion": "Diseño de oficina privada en Loma Bonita."
+    },
+    {
+        "categoria": "Comercial",
+        "sub": "oficinas",
+        "titulo": "NAYARIT YOGA COMERCIAL",
+        "imagenes": [
+            "img/proyecto/comercial/oficinas/nayarit_yoga/nayarit_yoga_1.webp"
+        ],
+        "descripcion": "Espacio comercial adaptado para yoga en Nayarit."
+    },
+    {
+        "categoria": "Comercial",
+        "sub": "clinicas",
+        "titulo": "DENTISTA NEZAHUALCOYOT",
+        "imagenes": [
+            "img/proyecto/comercial/clinicas/dentista_nezahualcoyot/dentista_nezahualcoyot_1.webp"
+        ],
+        "descripcion": "Clínica dental en Nezahualcóyotl."
+    },
+    {
+        "categoria": "Comercial",
+        "sub": "clinicas",
+        "titulo": "SKINAIRE",
+        "imagenes": [
+            "img/proyecto/comercial/clinicas/skinaire/skinaire_1.webp"
+        ],
+        "descripcion": "Proyecto de clínica especializada."
+    },
+    {
+        "categoria": "Comercial",
+        "sub": "clinicas",
+        "titulo": "ASA ORGANICS",
+        "imagenes": [
+            "img/proyecto/comercial/clinicas/asa_organics/asa_organics_1.webp"
+        ],
+        "descripcion": "Clínica con enfoque en productos orgánicos."
+    },
+    {
+        "categoria": "Comercial",
+        "sub": "clinicas",
+        "titulo": "CONSULTORIOS HOSPITALES ANGELES",
+        "imagenes": [
+            "img/proyecto/comercial/clinicas/consultorios_angeles/consultorios_angeles_1.webp"
+        ],
+        "descripcion": "Consultorios médicos en Hospital Ángeles."
+    },
+    {
+        "categoria": "Comercial",
+        "sub": "clinicas",
+        "titulo": "UROLOGO PEDREGAL",
+        "imagenes": [
+            "img/proyecto/comercial/clinicas/urologo_pedregal/urologo_pedregal_1.webp"
+        ],
+        "descripcion": "Consultorio de urología en Pedregal."
+    },
+    {
+        "categoria": "Comercial",
+        "sub": "clinicas",
+        "titulo": "MEDICA SUR",
+        "imagenes": [
+            "img/proyecto/comercial/clinicas/medica_sur/medica_sur_1.webp"
+        ],
+        "descripcion": "Proyecto de clínica en Médica Sur."
+    },
+    {
+        "categoria": "Comercial",
+        "sub": "bodegas",
+        "titulo": "SPX FLOW",
+        "imagenes": [
+            "img/proyectocomercial/bodegas/spx/spx1.webp",
+            "img/proyectocomercial/bodegas/spx/spx2.webp",
+            "img/proyectocomercial/bodegas/spx/spx3.webp"
+        ],
+        "descripcion": "Proyecto de bodega industrial SPX Flow."
+    },
+    {
+        "categoria": "Comercial",
+        "sub": "bodegas",
+        "titulo": "RANCHO DE GUADALUPE",
+        "imagenes": [
+            "img/proyectocomercial/bodegas/guadalupe/guadalupe1.webp",
+            "img/proyectocomercial/bodegas/guadalupe/guadalupe2.webp",
+            "img/proyectocomercial/bodegas/guadalupe/guadalupe3.webp"
+        ],
+        "descripcion": "Proyecto de bodega en Rancho de Guadalupe."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "Interes social",
+        "titulo": "XOXHIMILCO",
+        "imagenes": [
+            "img/proyectohabitacional/interes-social/xochi/xochimilco.webp",
+            "img/proyectohabitacional/interes-social/xochi/xochimilco2.webp",
+            "img/proyectohabitacional/interes-social/xochi/xochimilco3.webp",
+            "img/proyectohabitacional/interes-social/xochi/xochimilco4.webp"
+        ],
+        "descripcion": "Proyecto de vivienda de interés social en Xochimilco."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interes alto",
+        "titulo": "TOTOTONTLI",
+        "imagenes": [
+            "img/proyecto/residencial/interes_alto/tototontli/tototontli_1.webp"
+        ],
+        "descripcion": "Casa residencial de alto nivel."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interes alto",
+        "titulo": "TOHO",
+        "imagenes": [
+            "img/proyecto/residencial/interes_alto/toho/toho_1.webp"
+        ],
+        "descripcion": "Casa residencial de alto nivel."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interes alto",
+        "titulo": "CASA RESIDENCIAL SANTA CRUZ",
+        "imagenes": [
+            "img/proyecto/residencial/interes_alto/santa_cruz/santa_cruz_1.webp"
+        ],
+        "descripcion": "Casa residencial con acabados premium."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interes alto",
+        "titulo": "CASA PARAISO 2025",
+        "imagenes": [
+            "img/proyecto/residencial/interes_alto/paraiso2025/paraiso2025_1.webp"
+        ],
+        "descripcion": "Casa residencial de alto nivel."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interes alto",
+        "titulo": "XAHA",
+        "imagenes": [
+            "img/proyecto/residencial/interes_alto/xaha/xaha_1.webp"
+        ],
+        "descripcion": "Casa residencial de alto nivel."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interes alto",
+        "titulo": "CASA SANTA CRUZ",
+        "imagenes": [
+            "img/proyecto/residencial/interes_alto/casa_santa_cruz/casa_santa_cruz_1.webp"
+        ],
+        "descripcion": "Casa residencial con diseño moderno."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interes alto",
+        "titulo": "CHICHEWA",
+        "imagenes": [
+            "img/proyecto/residencial/interes_alto/chichewa/chichewa_1.webp"
+        ],
+        "descripcion": "Casa residencial de alto nivel."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interes alto",
+        "titulo": "CASA BARRETO",
+        "imagenes": [
+            "img/proyecto/residencial/interes_alto/casa_barreto/casa_barreto_1.webp"
+        ],
+        "descripcion": "Casa residencial de alto nivel."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interes alto",
+        "titulo": "RESIDENCIAL ARBOLADAS",
+        "imagenes": [
+            "img/proyecto/residencial/interes_alto/arboladas/arboladas_1.webp"
+        ],
+        "descripcion": "Residencial de alto nivel."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interes alto",
+        "titulo": "CASA PARAISO 2024",
+        "imagenes": [
+            "img/proyecto/residencial/interes_alto/paraiso2024/paraiso2024_1.webp"
+        ],
+        "descripcion": "Casa residencial de alto nivel."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interes alto",
+        "titulo": "GARCIA DE LEON",
+        "imagenes": [
+            "img/proyecto/residencial/interes_alto/garcia_leon/garcia_leon_1.webp"
+        ],
+        "descripcion": "Casa residencial de alto nivel."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interes alto",
+        "titulo": "CASA GONZALEZ",
+        "imagenes": [
+            "img/proyecto/residencial/interes_alto/casa_gonzalez/casa_gonzalez_1.webp"
+        ],
+        "descripcion": "Casa residencial de alto nivel."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interes alto",
+        "titulo": "RESIDENCIAL ACOZAC",
+        "imagenes": [
+            "img/proyecto/residencial/interes_alto/acozac/acozac_1.webp"
+        ],
+        "descripcion": "Residencial de alto nivel."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interes alto",
+        "titulo": "CABAÑA AMECA",
+        "imagenes": [
+            "img/proyecto/residencial/interes_alto/cabana_ameca/cabana_ameca_1.webp"
+        ],
+        "descripcion": "Cabaña residencial en Ameca."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "Multifamiliar",
+        "titulo": "CONDOMINIO JOSE DE LA MORA",
+        "imagenes": [
+            "img/proyecto/residencial/edificios/jose_de_la_mora/jose_de_la_mora_1.webp"
+        ],
+        "descripcion": "Condominio habitacional José de la Mora."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "Multifamiliar",
+        "titulo": "CONDOMINIO TIERRA Y LIBERTAD",
+        "imagenes": [
+            "img/proyecto/residencial/edificios/tierra_y_libertad/tierra_y_libertad_1.webp"
+        ],
+        "descripcion": "Condominio habitacional Tierra y Libertad."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "Multifamiliar",
+        "titulo": "LOMAS DE AYOTLA",
+        "imagenes": [
+            "img/proyecto/residencial/edificios/lomas_de_ayotla/lomas_de_ayotla_1.webp"
+        ],
+        "descripcion": "Edificio habitacional en Lomas de Ayotla."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interiorismo",
+        "titulo": "CASA GALLEGOS",
+        "imagenes": [
+            "img/proyecto/residencial/interiorismo/casa_gallegos/casa_gallegos_1.webp"
+        ],
+        "descripcion": "Proyecto de interiorismo residencial."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interiorismo",
+        "titulo": "JICURI",
+        "imagenes": [
+            "img/proyecto/residencial/interiorismo/jicuri/jicuri_1.webp"
+        ],
+        "descripcion": "Proyecto de interiorismo residencial."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interiorismo",
+        "titulo": "JUNACATLAN 2024",
+        "imagenes": [
+            "img/proyecto/residencial/interiorismo/junacatlan2024/junacatlan2024_1.webp"
+        ],
+        "descripcion": "Proyecto de interiorismo residencial."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interiorismo",
+        "titulo": "ADOLFO PRIETO 78º",
+        "imagenes": [
+            "img/proyecto/residencial/interiorismo/adolfo_prieto_78/adolfo_prieto_78_1.webp"
+        ],
+        "descripcion": "Proyecto de interiorismo residencial."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interiorismo",
+        "titulo": "BAÑO NAYARI",
+        "imagenes": [
+            "img/proyecto/residencial/interiorismo/bano_nayari/bano_nayari_1.webp"
+        ],
+        "descripcion": "Proyecto de interiorismo residencial."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interiorismo",
+        "titulo": "JUNACATLAN 2025",
+        "imagenes": [
+            "img/proyecto/residencial/interiorismo/junacatlan2025/junacatlan2025_1.webp"
+        ],
+        "descripcion": "Proyecto de interiorismo residencial."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interiorismo",
+        "titulo": "HERNAN 403 F",
+        "imagenes": [
+            "img/proyectohabitacional/interior/depahernan/depahernan.webp",
+            "img/proyectohabitacional/interior/depahernan/depahernan2.webp",
+            "img/proyectohabitacional/interior/depahernan/depahernan3.webp"
+        ],
+        "descripcion": "Proyecto de interiorismo residencial."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interiorismo",
+        "titulo": "VIA ROMA",
+        "imagenes": [
+            "img/proyecto/residencial/interiorismo/via_roma/via_roma_1.webp"
+        ],
+        "descripcion": "Proyecto de interiorismo residencial."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "interiorismo",
+        "titulo": "HERIBERTO FARIAS",
+        "imagenes": [
+            "img/proyecto/residencial/interiorismo/heriberto_farias/heriberto_farias_1.webp"
+        ],
+        "descripcion": "Proyecto de interiorismo residencial."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "paisajismo",
+        "titulo": "MURO LLORON ACOZAC",
+        "imagenes": [
+            "img/proyecto/residencial/paisaje/muro_lloron_acozac/muro_lloron_acozac_1.webp"
+        ],
+        "descripcion": "Proyecto de paisaje con muro llorón en Acozac."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "paisajismo",
+        "titulo": "PAISAJE CLAUSTRO SOR JUANA",
+        "imagenes": [
+            "img/proyecto/residencial/paisaje/claustro_sor_juana/claustro_sor_juana_1.webp"
+        ],
+        "descripcion": "Diseño de paisaje en Claustro Sor Juana."
+    },
+    {
+        "categoria": "Residencial",
+        "sub": "paisajismo",
+        "titulo": "JARDIN VERACRUZ",
+        "imagenes": [
+            "img/proyecto/residencial/paisaje/jardin_veracruz/jardin_veracruz_1.webp"
+        ],
+        "descripcion": "Diseño de jardín residencial en Veracruz."
+    }
+]

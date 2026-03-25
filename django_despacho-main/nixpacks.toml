@@ -1,0 +1,2 @@
+[start]
+cmd = "python scripts/railway_start.py"

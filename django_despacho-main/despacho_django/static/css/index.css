@@ -1,0 +1,382 @@
+/* Index (home) – estilos aislados para un look editorial, sobrio y arquitectónico */
+
+.index-page {
+  font-family: system-ui, -apple-system, "Segoe UI", Arial, Helvetica, sans-serif;
+  color: #111;
+  background: #fff;
+}
+
+.index-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.index-eyebrow {
+  margin: 0 0 14px;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.index-title {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.index-subtitle {
+  margin: 0 0 10px;
+  font-size: 22px;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.index-text {
+  margin: 10px 0 0;
+  font-size: 16px;
+  line-height: 1.65;
+  color: #1a1a1a;
+}
+
+.index-text--muted {
+  color: #666;
+}
+
+.index-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.index-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+/* ==========================
+   Promo Carcon (video + texto)
+========================== */
+.index-promo {
+  display: grid;
+  grid-template-columns: minmax(140px, 180px) 1fr;
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 18px;
+  padding: 12px 12px 12px 0;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.12);
+}
+
+.index-promo__media {
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f2f2f2;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  aspect-ratio: 9 / 16;
+}
+
+.index-promo__media iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.index-promo__title {
+  margin: 0 0 8px;
+  font-size: 18px;
+  line-height: 1.35;
+  font-weight: 600;
+  color: #111;
+}
+
+.index-promo__text {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #444;
+}
+
+.index-promo__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.index-promo__notice {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #666;
+}
+
+.index-promo__list {
+  margin: 0 0 12px;
+  padding-left: 18px;
+  font-size: 14px;
+  color: #222;
+}
+
+.index-promo__list li {
+  margin: 4px 0;
+}
+
+.index-promo__cta {
+  align-self: start;
+  padding: 10px 14px;
+  font-size: 13px;
+  border-radius: 999px;
+}
+
+.index-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+  border: 1px solid #111;
+}
+
+.index-btn--primary {
+  background: #111;
+  color: #fff;
+}
+
+.index-btn--primary:hover {
+  background: #000;
+}
+
+.index-btn--ghost {
+  background: transparent;
+  color: #111;
+}
+
+.index-btn--ghost:hover {
+  background: #f4f4f4;
+}
+
+.index-btn:focus-visible,
+.index-link:focus-visible,
+.index-media-link:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 3px;
+}
+
+.index-link {
+  display: inline-block;
+  margin-top: 14px;
+  color: #111;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.35);
+  padding-bottom: 2px;
+  transition: border-color 160ms ease;
+}
+
+.index-link:hover {
+  border-bottom-color: rgba(17, 17, 17, 1);
+}
+
+/* 1) HERO */
+.index-hero {
+  padding: 56px 0 18px;
+}
+
+.index-hero__grid {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 36px;
+  align-items: center;
+}
+
+.index-hero__title {
+  margin: 0;
+  font-size: 44px;
+  line-height: 1.03;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.index-hero__lead {
+  margin: 14px 0 0;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #1a1a1a;
+  max-width: 44ch;
+}
+
+.index-hero__media {
+  margin: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  min-height: 420px;
+}
+
+/* 2) ABOUT */
+.index-about {
+  padding: 52px 0;
+}
+
+.index-split {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 34px;
+  align-items: center;
+}
+
+.index-split__media {
+  margin: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  min-height: 360px;
+}
+
+.index-split__copy {
+  padding: 6px 0;
+}
+
+/* 3) FEATURED */
+.index-featured {
+  padding: 48px 0 12px;
+}
+
+.index-featured__header {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.index-feature {
+  border-top: 1px solid rgba(17, 17, 17, 0.12);
+  padding: 26px 0;
+}
+
+.index-feature__grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 30px;
+  align-items: center;
+}
+
+.index-feature--reverse .index-feature__grid {
+  grid-template-columns: 0.8fr 1.2fr;
+}
+
+.index-feature--reverse .index-feature__media {
+  order: 2;
+}
+
+.index-feature__media {
+  margin: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 320px;
+}
+
+.index-media-link {
+  display: block;
+  height: 100%;
+}
+
+.index-feature__copy {
+  padding: 2px 0;
+}
+
+/* 4) CTA */
+.index-cta {
+  padding: 60px 0;
+}
+
+.index-cta__inner {
+  border-top: 1px solid rgba(17, 17, 17, 0.12);
+  padding-top: 34px;
+  text-align: center;
+}
+
+.index-cta__title {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* CTA: balance visual del texto descriptivo */
+.index-cta__inner .index-text {
+  max-width: 56ch;
+  margin: 12px auto 0;
+  text-align: center;
+}
+
+/* Responsive mínimo */
+@media (max-width: 980px) {
+  .index-hero__grid,
+  .index-split,
+  .index-feature__grid,
+  .index-feature--reverse .index-feature__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .index-promo {
+    grid-template-columns: 1fr;
+  }
+
+  .index-promo__media {
+    max-width: 260px;
+    margin: 0 auto;
+  }
+
+  .index-hero__media {
+    min-height: 320px;
+  }
+
+  .index-split__media,
+  .index-feature__media {
+    min-height: 260px;
+  }
+
+  .index-feature--reverse .index-feature__media {
+    order: 0;
+  }
+
+  .index-hero {
+    padding-top: 36px;
+  }
+
+  .index-hero__title {
+    font-size: 36px;
+  }
+
+  .index-cta__title {
+    font-size: 28px;
+  }
+}
+
+/* CTA: refuerzo de centrado visual */
+.index-cta .index-cta__inner {
+  text-align: center;
+}
+
+.index-cta .index-cta__inner .index-cta__title {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.index-cta .index-cta__inner .index-text {
+  max-width: 56ch;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}

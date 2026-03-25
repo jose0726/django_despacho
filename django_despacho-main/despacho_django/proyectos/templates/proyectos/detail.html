@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ proyecto.nombre }} | Despacho Carcon{% endblock %}
+{% block body_class %}detalle-proyecto{% endblock %}
+
+{% block extra_css %}
+<style>
+  .detalle-header {
+    margin-bottom: 1.5rem;
+  }
+  .detalle-header a {
+    color: var(--color-acento, #007bff);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .detalle-header a:hover { text-decoration: underline; }
+  .detalle-header h1 {
+    margin: 0.5rem 0 0.25rem;
+    font-size: 2rem;
+  }
+  .detalle-meta {
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+  .detalle-descripcion {
+    margin-bottom: 2rem;
+    line-height: 1.8;
+  }
+
+  /* ── Visor 3D ─────────────────────────────────────── */
+  .visor-3d-wrapper {
+    margin-bottom: 2rem;
+  }
+  .visor-3d-wrapper h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-secundario, #333);
+  }
+  #visor-3d {
+    width: 100%;
+    height: 480px;
+    border-radius: 12px;
+    background: #1a1a2e;
+    display: block;
+    cursor: grab;
+    position: relative;
+  }
+  #visor-3d:active { cursor: grabbing; }
+  .visor-hint {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 0.4rem;
+    text-align: center;
+  }
+
+  /* ── Galería de imágenes ───────────────────────────── */
+  .galeria {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .galeria img {
+    width: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+  }
+  .galeria img:hover { transform: scale(1.03); }
+
+  /* Loading spinner sobre canvas */
+  #visor-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.9rem;
+    pointer-events: none;
+    gap: 0.75rem;
+  }
+  .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid rgba(255,255,255,0.2);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #visor-3d-container { position: relative; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="detalle-header">
+  <a href="{% url 'proyectos:proyectos_page' %}">← Volver a Proyectos</a>
+  <h1>{{ proyecto.nombre }}</h1>
+</div>
+<p class="detalle-meta">{{ proyecto.categoria }}{% if proyecto.subcategoria %} · {{ proyecto.subcategoria }}{% endif %}</p>
+
+{% if proyecto.imagen %}
+  <img src="{{ proyecto.imagen.url }}" alt="{{ proyecto.nombre }}"
+       style="width:100%; max-height:420px; object-fit:cover; border-radius:12px; margin-bottom:2rem;">
+{% endif %}
+
+<p class="detalle-descripcion">{{ proyecto.descripcion }}</p>
+
+{% if proyecto.modelo_3d %}
+<div class="visor-3d-wrapper">
+  <h2>Modelo 3D interactivo</h2>
+  <div id="visor-3d-container">
+    <canvas id="visor-3d"></canvas>
+    <div id="visor-loading"><div class="spinner"></div><span>Cargando modelo…</span></div>
+  </div>
+  <p class="visor-hint">Arrastra para rotar · Scroll para zoom · Clic derecho para desplazar</p>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const MODEL_URL = "{{ proyecto.modelo_3d.url }}";
+
+// ── Escena ──────────────────────────────────────────────────
+const canvas  = document.getElementById('visor-3d');
+const loading = document.getElementById('visor-loading');
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x1a1a2e);
+
+// ── Entorno IBL (necesario para texturas PBR / metálicos) ───
+const pmrem = new THREE.PMREMGenerator(renderer);
+pmrem.compileEquirectangularShader();
+const envTexture = pmrem.fromScene(new THREE.RoomEnvironment()).texture;
+scene.environment = envTexture;  // ilumina materiales PBR con texturas
+
+const camera = new THREE.PerspectiveCamera(
+  45, canvas.clientWidth / canvas.clientHeight, 0.01, 10000
+);
+
+// ── Iluminación ─────────────────────────────────────────────
+scene.add(new THREE.AmbientLight(0xffffff, 1.0));
+scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 0.8));
+
+const dirLight = new THREE.DirectionalLight(0xffffff, 1.8);
+dirLight.castShadow = true;
+scene.add(dirLight);
+
+const fillLight = new THREE.DirectionalLight(0x8888ff, 0.5);
+scene.add(fillLight);
+
+const backLight = new THREE.DirectionalLight(0xffffff, 0.3);
+scene.add(backLight);
+
+// ── Controles ───────────────────────────────────────────────
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.enablePan = true;
+
+// ── Easing suave (ease-out cubic) ───────────────────────────
+function easeOutCubic(t) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
+// ── Animación fly-in de cámara ──────────────────────────────
+let flyInAnimation = null;
+
+function animateCameraTo(targetPos, targetLookAt, duration = 2.0) {
+  const startPos = camera.position.clone();
+  const startTarget = controls.target.clone();
+  const startTime = performance.now();
+
+  flyInAnimation = {
+    startPos,
+    startTarget,
+    endPos: targetPos.clone(),
+    endTarget: targetLookAt.clone(),
+    startTime,
+    duration: duration * 1000, // ms
+  };
+}
+
+function updateFlyIn() {
+  if (!flyInAnimation) return;
+
+  const elapsed = performance.now() - flyInAnimation.startTime;
+  let t = Math.min(elapsed / flyInAnimation.duration, 1.0);
+  t = easeOutCubic(t);  // suavizado
+
+  camera.position.lerpVectors(flyInAnimation.startPos, flyInAnimation.endPos, t);
+  controls.target.lerpVectors(flyInAnimation.startTarget, flyInAnimation.endTarget, t);
+  camera.lookAt(controls.target);
+
+  if (t >= 1.0) {
+    flyInAnimation = null;
+    controls.update();
+  }
+}
+
+// ── Encuadrar modelo (Sketchfab-style) ──────────────────────
+function frameModel(object) {
+  const box = new THREE.Box3().setFromObject(object);
+  const sphere = new THREE.Sphere();
+  box.getBoundingSphere(sphere);
+  
+  const center = sphere.center;
+  const radius = sphere.radius;
+  if (radius === 0) return;
+
+  const fov = camera.fov * (Math.PI / 180);
+  const aspect = camera.aspect;
+  const effectiveFov = aspect > 1 ? fov : fov * aspect;
+  const idealDist = (radius / Math.sin(effectiveFov / 2)) * 0.85;
+
+  // Posición final de la cámara (vista 3/4 elevada)
+  const angle = Math.PI / 5;
+  const elevation = Math.PI / 7;
+  const finalPos = new THREE.Vector3(
+    center.x + idealDist * Math.sin(angle) * Math.cos(elevation),
+    center.y + idealDist * Math.sin(elevation),
+    center.z + idealDist * Math.cos(angle) * Math.cos(elevation)
+  );
+
+  // Posición inicial: más lejos y más arriba (efecto fly-in)
+  const startPos = new THREE.Vector3(
+    center.x + idealDist * 3 * Math.sin(angle) * Math.cos(elevation),
+    center.y + idealDist * 1.5,
+    center.z + idealDist * 3 * Math.cos(angle) * Math.cos(elevation)
+  );
+
+  // Near/far
+  camera.near = idealDist * 0.001;
+  camera.far = idealDist * 50;
+  camera.updateProjectionMatrix();
+
+  // Límites de zoom
+  controls.minDistance = idealDist * 0.1;
+  controls.maxDistance = idealDist * 5;
+
+  // Posicionar luces
+  dirLight.position.set(
+    center.x + idealDist * 0.8,
+    center.y + idealDist * 1.2,
+    center.z + idealDist * 0.6
+  );
+  dirLight.target.position.copy(center);
+  scene.add(dirLight.target);
+  
+  fillLight.position.set(
+    center.x - idealDist * 0.6,
+    center.y + idealDist * 0.3,
+    center.z - idealDist * 0.4
+  );
+  
+  backLight.position.set(
+    center.x - idealDist * 0.3,
+    center.y + idealDist * 0.1,
+    center.z - idealDist * 0.8
+  );
+
+  scene.fog = new THREE.FogExp2(0x1a1a2e, 0.08 / idealDist);
+
+  // ★ Iniciar desde lejos y animar hasta la posición ideal
+  camera.position.copy(startPos);
+  controls.target.copy(center);
+  controls.update();
+
+  // Delay pequeño para que se vea el modelo antes de animar
+  setTimeout(() => {
+    animateCameraTo(finalPos, center, 2.0);
+  }, 100);
+
+  console.log(`Modelo: radio=${radius.toFixed(1)}, dist=${idealDist.toFixed(1)}`);
+}
+
+// ── Carga del modelo ────────────────────────────────────────
+const loader = new GLTFLoader();
+loader.load(
+  MODEL_URL,
+  (gltf) => {
+    const model = gltf.scene;
+
+    model.traverse(child => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+        if (child.material) {
+          // Preservar texturas: solo ajustar lado y evitar colores completamente negros
+          // cuando el material NO tiene mapa de textura de color.
+          const mats = Array.isArray(child.material) ? child.material : [child.material];
+          mats.forEach(m => {
+            m.side = THREE.DoubleSide;
+            m.needsUpdate = true;
+            // Solo corregir color negro base si no hay textura diffuse
+            if (!m.map && m.color && m.color.r < 0.05 && m.color.g < 0.05 && m.color.b < 0.05) {
+              m.color.setHex(0xaaaaaa);
+            }
+          });
+        } else {
+          // Sin material: asignar uno gris genérico
+          child.material = new THREE.MeshStandardMaterial({
+            color: 0xcccccc, roughness: 0.6, metalness: 0.1, side: THREE.DoubleSide
+          });
+        }
+      }
+    });
+
+    scene.add(model);
+    frameModel(model);
+    loading.style.display = 'none';
+  },
+  (progress) => {
+    if (progress.total > 0) {
+      const pct = Math.round((progress.loaded / progress.total) * 100);
+      loading.querySelector('span').textContent = `Cargando modelo… ${pct}%`;
+    }
+  },
+  (error) => {
+    console.error('Error al cargar modelo 3D:', error);
+    loading.innerHTML = '<span style="color:#ff6b6b">No se pudo cargar el modelo 3D.</span>';
+  }
+);
+
+// ── Responsive ──────────────────────────────────────────────
+function onResize() {
+  const w = canvas.clientWidth;
+  const h = canvas.clientHeight;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+}
+window.addEventListener('resize', onResize);
+
+// ── Loop de renderizado ─────────────────────────────────────
+function animate() {
+  requestAnimationFrame(animate);
+  updateFlyIn();  // ← animación fly-in
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+</script>
+{% endif %}
+
+{% if proyecto.imagenes.all %}
+<div class="galeria">
+  {% for img in proyecto.imagenes.all %}
+    <img src="{{ img.imagen.url }}" alt="{{ proyecto.nombre }} - imagen {{ forloop.counter }}" loading="lazy">
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
